@@ -1,14 +1,11 @@
-// Example of open/save usage with UniFileBrowser
-// This script is free to use in any manner
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
-public class UniFileBrowserExample : MonoBehaviour
+public class FilePickerLoadBackgrounds : MonoBehaviour
 {
-
     string message = "";
     float alpha = 1.0f;
     char pathChar = '/';
@@ -16,26 +13,35 @@ public class UniFileBrowserExample : MonoBehaviour
     private static string fileName = "Standard.jpg";
     List<string> children = new List<string>();
     // imageImport sn = gameObject.GetComponent<imageImport>();
+    SpriteRenderer sr;
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
         {
             pathChar = '\\';
         }
     }
 
+    void OnClick()
+    {
+        Debug.Log("xfzfd");
+        enabled = true;
+
+    }
+
     void OnGUI()
     {
-        if (GUI.Button(new Rect(100, 50, 95, 35), "Open"))
-        {
-            if (UniFileBrowser.use.allowMultiSelect)
-            {
-                UniFileBrowser.use.OpenFileWindow(OpenFiles);
-            }
-            else {
-                UniFileBrowser.use.OpenFileWindow(OpenFile);
-            }
-        }
+        /* if (GUI.Button(new Rect(100, 50, 95, 35), "Open"))
+         {
+             if (UniFileBrowser.use.allowMultiSelect)
+             {
+                 UniFileBrowser.use.OpenFileWindow(OpenFiles);
+             }
+             else {
+                 UniFileBrowser.use.OpenFileWindow(OpenFile);
+             }
+         }*/
         if (GUI.Button(new Rect(100, 125, 95, 35), "Save"))
         {
             UniFileBrowser.use.SaveFileWindow(SaveFile);
@@ -51,7 +57,7 @@ public class UniFileBrowserExample : MonoBehaviour
         col.a = 1.0f;
         GUI.color = col;
     }
-
+    /*
     void OpenFile(string pathToFile)
     {
         var fileIndex = pathToFile.LastIndexOf(pathChar);
@@ -69,7 +75,7 @@ public class UniFileBrowserExample : MonoBehaviour
         }
         Fade();
     }
-
+*/
     void SaveFile(string pathToFile)
     {
         var fileIndex = pathToFile.LastIndexOf(pathChar);
@@ -85,21 +91,32 @@ public class UniFileBrowserExample : MonoBehaviour
         Fade();
 
     }
-
-    public static Texture2D LoadPNG(string filePath)
+    StreamWriter fileWriter = null;
+    private SpriteRenderer spriteRenderer;
+    private Texture2D LoadPNG(string filePath)
     {
 
+        //this.transform.GetComponent<SpriteRenderer>().sprite = Resources.Load(filePath, typeof(Sprite)) as Sprite;
         Texture2D tex = null;
         byte[] fileData;
 
         if (File.Exists(filePath))
         {
             fileData = File.ReadAllBytes(filePath);
+           // File.WriteAllBytes(Application.persistentDataPath + "/LayoutImages/"+ fileData + "1", fileData);
             tex = new Texture2D(2, 2);
             tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
-            Debug.Log("In the Tex: " + tex);
+      
+            Debug.Log("In the Tex: " + tex.LoadImage(fileData));
         }
+
+        Rect rec = new Rect(0, 0, tex.width, tex.height);
+        Sprite.Create(tex, rec, new Vector2(0, 0), 1);
+        //spriteRenderer.sprite = Sprite.Create(tex, rec, new Vector2(0, 0), .01f);
+        GetComponent<Renderer>().material.mainTexture = tex;
         SaveTextureToFile(tex, filePath);
+        //this.gameObject.transform.GetComponent<Image>().sprite= spriteRenderer.sprite ;
+        gameObject.GetComponent<SpriteRenderer>().sprite = Sprite.Create(tex, rec, new Vector2(0, 0), 1);
         return tex;
     }
 
@@ -107,9 +124,9 @@ public class UniFileBrowserExample : MonoBehaviour
     {
         byte[] bytes;
         bytes = texture.EncodeToPNG();
-
+        File.WriteAllBytes(Application.persistentDataPath + "/LayoutImages/" + fileName, bytes);
         System.IO.FileStream fileSave;
-        fileSave = new FileStream(Application.dataPath + "/Resources/" + fileName, FileMode.Create);
+        fileSave = new FileStream(Application.dataPath + "/Resources/Stickers/Standard/" + fileName, FileMode.Create);
 
         System.IO.BinaryWriter binary;
         binary = new BinaryWriter(fileSave);
