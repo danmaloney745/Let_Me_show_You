@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(BoxCollider))]
 
-public class Drag : MonoBehaviour {
+public class DragPlayer : MonoBehaviour {
     public Transform gameCanvas;
     public Transform gamePanel;
     public float scaleFactor = 0.5f;        // The rate of change of the scale

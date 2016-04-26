@@ -6,7 +6,7 @@ using System.Collections;
 
 //Script altered from https://unity3d.com/learn/tutorials/modules/beginner/platform-specific/pinch-zoom
 
-public class ClickDragScript : MonoBehaviour {
+public class DragAsset : MonoBehaviour {
 	public Transform gameCanvas;
 	public Transform gamePanel;
 	private bool activeAsset;

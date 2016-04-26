@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.IO;
 
-public class AddElement : MonoBehaviour
+public class SceneEditor : MonoBehaviour
 {
     public Canvas sceneCanvas;
     public RectTransform sceneSelector;
